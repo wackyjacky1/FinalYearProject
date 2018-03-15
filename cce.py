@@ -25,7 +25,7 @@ def webhook_cce_training(req):
     
     speech = "The ISFCE has Authorized Training Centers (ATCs) around the world to train specifically for CCE certification. " \
              "It is reccommended that you enroll within one of these courses before " \
-             "attempting the CCE certification testing, especially if you are new to the field of computer forensics" \
+             "attempting the CCE certification testing." \
              "\n\nFor more info on these ATCs bootcamp visit the website at: http://www.cce-bootcamp.com/" \
              "\n\nMore information about CCE certification can be obtained by entering one of the disciples below:" \
              "\n1. CCE Requirements " \

@@ -9,6 +9,7 @@ import management
 import incident_certs
 import pentest_certs
 import cd_certs
+import encase
 
 from flask import Flask
 from flask import request
@@ -53,6 +54,9 @@ def processRequest(req):
     elif req.get("result").get("action") == "experienced":
         data = req
         res = webhook_for_experienced(data)
+    elif req.get("result").get("action") == "defn-cf":
+        data = req
+        res = webhook_defn_cf(data)
     elif req.get("result").get("action") == "GIAC-info":
         data = req
         res = webhook_giac_summary(data)
@@ -62,6 +66,47 @@ def processRequest(req):
     elif req.get("result").get("action") == "cce-info":
         data = req
         res = cce.webhook_cce_info(data)
+
+    # Statements for EnCase certifications
+    elif req.get("result").get("action") == "encase-info":
+        data = req
+        res = encase.webhook_encase_info(data)
+    elif req.get("result").get("action") == "encase-ence":
+        data = req
+        res = encase.webhook_encase_ence(data)
+    elif req.get("result").get("action") == "encase-ence-start":
+        data = req
+        res = encase.webhook_encase_ence_start(data)
+    elif req.get("result").get("action") == "encase-ence-apply":
+        data = req
+        res = encase.webhook_encase_ence_apply(data)
+    elif req.get("result").get("action") == "encase-ence-renew":
+        data = req
+        res = encase.webhook_encase_ence_renew(data)
+    elif req.get("result").get("action") == "encase-cfsr":
+        data = req
+        res = encase.webhook_encase_cfsr(data)
+    elif req.get("result").get("action") == "encase-cfsr-start":
+        data = req
+        res = encase.webhook_encase_cfsr_start(data)
+    elif req.get("result").get("action") == "encase-cfsr-apply":
+        data = req
+        res = encase.webhook_encase_cfsr_apply(data)
+    elif req.get("result").get("action") == "encase-cfsr-renew":
+        data = req
+        res = encase.webhook_encase_cfsr_renew(data)
+    elif req.get("result").get("action") == "encase-encep":
+        data = req
+        res = encase.webhook_encase_encep(data)
+    elif req.get("result").get("action") == "encase-encep-start":
+        data = req
+        res = encase.webhook_encase_encep_start(data)
+    elif req.get("result").get("action") == "encase-encep-apply":
+        data = req
+        res = encase.webhook_encase_encep_apply(data)
+    elif req.get("result").get("action") == "encase-encep-renew":
+        data = req
+        res = encase.webhook_encase_encep_renew(data)
 
     # Statements for CCE certification
     elif req.get("result").get("action") == "cce-training":
@@ -385,13 +430,51 @@ def webhookForMaster(req):
 
 # Webhook for General courses recommended by the system
 def webhook_for_beginner(req):
-    speech = "For individuals who are new to computer forensics, perhaps have a look at completing a degree or masters " \
-             "in Computer Forensics. For more info enter 'degree' or 'masters'" \
-             "\n\nAnother options for beginners is to get GIAC certification.  GIAC certifictaion is considered one of the "  \
+    speech = "1. For individuals who are interested in persuing a career in computer forensics, " \
+             "a great place to start is by completing a degree or masters " \
+             "related to Computer Forensics. For more info enter 'Degree' or 'Masters'" \
+             "\n\n3. For infomation on what Computer Forensics is, enter 'Defenition'" \
+             "\n\n2. Another options for beginners is to get GIAC certification.  GIAC certifictaion is considered one of the "  \
              "highest certifications possible with regard to computer forensics that a beginner can obtain." \
              "\nFor more info on GIAC certifications type 'giac info'" \
-             
 
+    #print("Response")
+    #print(speech)
+    return {
+
+        #"speech":speech,
+        #"displaySpeech": speech,
+        #"source": "FProject",
+      #   "messages": [
+      #   {
+      #     "type": 3,
+      #     "platform": "facebook",
+      #     "speech": "1. For individuals who are interested in persuing a career in computer forensics, " \
+      #        "a great place to start is by completing a degree or masters " \
+      #        "related to Computer Forensics. For more info enter 'Degree' or 'Masters'" \
+      #        "\n\n3. For infomation on what Computer Forensics is, enter 'Defenition'" \
+      #        "\n\n2. Another options for beginners is to get GIAC certification.  GIAC certifictaion is considered one of the "  \
+      #        "highest certifications possible with regard to computer forensics that a beginner can obtain." \
+      #        "\nFor more info on GIAC certifications type 'giac info'" \
+      #   },
+      #   {
+      #     "type": 3,
+      #     "platform": "facebook",
+      #     "imageUrl": "http://sarsfieldtechnology.com/wp-content/uploads/2013/09/GIAC.jpg"
+      #   }
+        
+      # ]
+    }
+
+
+
+# Webhook for experienced computer forensic examiners looking for certification
+def webhook_for_experienced(req):
+
+    speech = "More advanced computer forensic analysts should look at obtaining Certified Computer Examiner (CCE) certification. " \
+             "For more info on CCE certification enter 'CCE info'." \
+             "\n\nAnother possible option is to get EnCase certification. For more info on Encase certification enter 'Encase info'"
+             
     print("Response")
     print(speech)
     return {
@@ -400,11 +483,15 @@ def webhook_for_beginner(req):
         "source": "FProject"
     }
 
-# Webhook for experienced computer forensic examiners looking for certification
-def webhook_for_experienced(req):
+# Webhook that explains what computer forensics is
+def webhook_defn_cf(req):
 
-    speech = "More advanced computer forensic analysts should look at obtaining Certified Computer Examiner (CCE) certification. " \
-             "For more info on CCE certification enter 'CCE info'."
+    speech = "Computer Forensics is the analysis of information contained within, and created with computer systems, " \
+             "typically in the interest of figuring out what happened, when it happened, " \
+             "how it happened, and who was involved. " \
+             "\n\nFor further info I would reccomend reading this wikipedia article: https://en.wikipedia.org/wiki/Computer_forensics" \
+             "\n\nAnd have a look at this frequently asked questions page on computer forensics: " \
+             "https://evestigate.com/computer-forensics-faq/"
              
     print("Response")
     print(speech)
@@ -425,11 +512,10 @@ def webhook_giac_summary(req):
 
     speech = "GIAC is for professionals working or interested in information " \
              "security, legal and law enforcement industries with a need to understand computer forensic analysis. " \
-             "The certification focuses on skills required to collect and analyze data from Windows computer " \
-             "systems." \
+             "The certification focuses on analyzing data from Windows computer systems." \
              "\n\nNo entry requirements are necessary to apply for any GIAC certifications. " \
              "\n\nGIAC offers a variety of certifications. " \
-             "For a list of the certification categories GIAC offers type 'GIAC cat'" \
+             "\n\nFor a list of the certification categories GIAC offers type 'GIAC cat'" \
              "\n\nOr visit their website at: " + str(giac_link[name])
 
     print("Response")
